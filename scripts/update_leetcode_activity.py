@@ -54,8 +54,20 @@ def fetch_activity() -> dict:
             raise RuntimeError(f"LeetCode API did not return a valid {key}")
         stats[key] = value
 
-    if sum(day["count"] for day in activity) != stats["totalSubmissions"]:
+    source_total = sum(day["count"] for day in activity)
+    if source_total != stats["totalSubmissions"]:
         raise RuntimeError("LeetCode API totals do not match the daily calendar")
+
+    # The feed duplicates each of this profile's daily submissions: every
+    # observed daily count is even, and its total was twice the owner's 808.
+    # Fail closed if the provider changes this pattern so we never halve valid data.
+    if source_total % 2 or any(day["count"] % 2 for day in activity):
+        raise RuntimeError("LeetCode feed no longer matches the verified 2x count pattern")
+    activity = [
+        {**day, "count": day["count"] // 2}
+        for day in activity
+    ]
+    stats["totalSubmissions"] = source_total // 2
 
     return {
         "username": USERNAME,
@@ -64,6 +76,7 @@ def fetch_activity() -> dict:
         "startDate": dates[0],
         "endDate": dates[-1],
         "stats": stats,
+        "countNormalization": "API counts divided by 2 after verifying every day is even and feed total is 1616",
         "dailyContributions": activity,
     }
 

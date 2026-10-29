@@ -8,46 +8,9 @@
   const stats = document.getElementById('leetcode-stats');
   const source = document.getElementById('leetcode-source');
   if (!state || !frame) return;
-  const tooltip = document.createElement('div');
-  tooltip.className = 'calendar-tooltip'; tooltip.setAttribute('role', 'status'); tooltip.hidden = true;
-  document.body.append(tooltip);
-  let touchTimer;
-
-  function showTooltip(cell, x, y) {
-    tooltip.textContent = cell.dataset.tip;
-    tooltip.hidden = false;
-    const left = Math.min(x + 12, window.innerWidth - tooltip.offsetWidth - 10);
-    const top = Math.max(8, Math.min(y + 14, window.innerHeight - tooltip.offsetHeight - 8));
-    tooltip.style.left = `${Math.max(8, left)}px`; tooltip.style.top = `${top}px`;
-  }
-
-  function hideTooltip() { tooltip.hidden = true; }
-  frame.addEventListener('pointerover', event => {
-    const cell = event.target.closest?.('.calendar-day');
-    if (cell) showTooltip(cell, event.clientX, event.clientY);
-  });
-  frame.addEventListener('pointermove', event => {
-    const cell = event.target.closest?.('.calendar-day');
-    if (cell && !tooltip.hidden) showTooltip(cell, event.clientX, event.clientY);
-  });
-  frame.addEventListener('pointerout', event => {
-    if (event.target.closest?.('.calendar-day') && !event.relatedTarget?.closest?.('.calendar-day')) hideTooltip();
-  });
-  frame.addEventListener('pointerdown', event => {
-    const cell = event.target.closest?.('.calendar-day');
-    if (cell) { showTooltip(cell, event.clientX, event.clientY); clearTimeout(touchTimer); touchTimer = setTimeout(hideTooltip, 2600); }
-  });
-  frame.addEventListener('focusin', event => {
-    const cell = event.target.closest?.('.calendar-day');
-    if (cell) { const rect = cell.getBoundingClientRect(); showTooltip(cell, rect.left + rect.width / 2, rect.top); }
-  });
-  frame.addEventListener('focusout', event => {
-    if (event.target.closest?.('.calendar-day') && !event.relatedTarget?.closest?.('.calendar-day')) hideTooltip();
-  });
-
   function validate(payload) {
     const data = payload?.data ?? payload;
-    const days = data?.dailyContributions;
+    let days = data?.dailyContributions;
     if ((payload?.status && payload.status !== 'success') || data?.username !== USERNAME || !Array.isArray(days) || days.length !== 365) throw new Error('Invalid or incomplete activity data');
     let previous = '';
     for (const day of days) {
@@ -57,9 +20,15 @@
       previous = day.date;
     }
     if (data.startDate !== days[0].date || data.endDate !== days[days.length - 1].date) throw new Error('Activity date range does not match');
-    const total = days.reduce((sum, day) => sum + day.count, 0);
-    if (!data.stats || data.stats.totalSubmissions !== total || !Number.isInteger(data.stats.activeDays) || !Number.isInteger(data.stats.currentStreak) || !Number.isInteger(data.stats.longestStreak)) throw new Error('Activity statistics are invalid');
-    return { days, stats: data.stats, updatedAt: data.updatedAt };
+    const sourceTotal = days.reduce((sum, day) => sum + day.count, 0);
+    if (!data.stats || data.stats.totalSubmissions !== sourceTotal || !Number.isInteger(data.stats.activeDays) || !Number.isInteger(data.stats.currentStreak) || !Number.isInteger(data.stats.longestStreak)) throw new Error('Activity statistics are invalid');
+    let summary = data.stats;
+    if (!data.countNormalization) {
+      if (sourceTotal % 2 || days.some(day => day.count % 2)) throw new Error('LeetCode count normalization could not be verified');
+      days = days.map(day => ({ ...day, count: day.count / 2 }));
+      summary = { ...data.stats, totalSubmissions: sourceTotal / 2 };
+    }
+    return { days, stats: summary, updatedAt: data.updatedAt };
   }
 
   function render({ days, stats: summary, updatedAt }, label) {
@@ -67,6 +36,8 @@
     const width = left + columns * (cell + gap), height = top + rows * (cell + gap) + 3;
     const start = new Date(`${days[0].date}T00:00:00Z`);
     const offset = (start.getUTCDay() + 6) % 7;
+    const firstMonth = days[0].date.slice(0, 7);
+    const firstMonthDays = days.filter(day => day.date.slice(0, 7) === firstMonth).length;
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('class', 'calendar-svg'); svg.setAttribute('viewBox', `0 0 ${width} ${height}`); svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', `LeetCode submissions for ${days.length} days`);
     ['Mon', 'Wed', 'Fri'].forEach((name, rowIndex) => {
@@ -76,7 +47,8 @@
     days.forEach((day, index) => {
       const date = new Date(`${day.date}T00:00:00Z`), col = Math.floor((index + offset) / 7), row = (index + offset) % 7;
       const month = date.toLocaleString('en', { month: 'short', timeZone: 'UTC' });
-      if (date.getUTCDate() === 1 || index === 0) {
+      const skipTinyLeadingMonth = index === 0 && firstMonthDays < 4;
+      if ((date.getUTCDate() === 1 || index === 0) && !skipTinyLeadingMonth) {
         if (month !== lastMonth) { const labelNode = document.createElementNS(svg.namespaceURI, 'text'); labelNode.setAttribute('x', String(left + col * (cell + gap))); labelNode.setAttribute('y', '11'); labelNode.setAttribute('class', 'calendar-month'); labelNode.textContent = month; svg.append(labelNode); lastMonth = month; }
       }
       const rect = document.createElementNS(svg.namespaceURI, 'rect'); rect.setAttribute('x', String(left + col * (cell + gap))); rect.setAttribute('y', String(top + row * (cell + gap))); rect.setAttribute('width', String(cell)); rect.setAttribute('height', String(cell)); rect.setAttribute('rx', '2'); rect.setAttribute('fill', COLORS[day.level]); rect.setAttribute('class', 'calendar-day'); rect.setAttribute('tabindex', '0'); rect.setAttribute('role', 'img'); rect.setAttribute('aria-label', `${day.date}: ${day.count} submissions`); rect.setAttribute('data-tip', `${day.date}: ${day.count} ${day.count === 1 ? 'submission' : 'submissions'}`);

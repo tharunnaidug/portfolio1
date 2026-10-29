@@ -1,4 +1,4 @@
-name: Update LeetCode activity snapshot
+name: Update coding activity snapshots
 
 on:
   schedule:
@@ -15,11 +15,14 @@ jobs:
       - uses: actions/checkout@v4
       - name: Fetch public submission calendar
         run: python scripts/update_leetcode_activity.py
+      - name: Fetch public GitHub contribution calendar
+        run: python scripts/update_github_activity.py
       - name: Commit updated snapshot
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add activity/leetcode.json
+          git add activity/github.json
           if git diff --cached --quiet; then
             echo "LeetCode activity snapshot is unchanged."
           else

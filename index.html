@@ -34,7 +34,7 @@
     .primary-nav{display:flex;gap:24px;margin-left:auto;margin-right:26px;height:100%;align-items:center}
     .primary-nav a{font-size:15px;text-decoration:none;color:#aaa;white-space:nowrap}
     .primary-nav a{font-family:var(--mono);font-size:14px}
-    #leetcode-frame .calendar-day{cursor:help}#leetcode-frame .calendar-day:hover,#leetcode-frame .calendar-day:focus{stroke:#eee;stroke-width:2}
+    .calendar-svg .calendar-day{cursor:help}.calendar-svg .calendar-day:hover,.calendar-svg .calendar-day:focus{stroke:#eee;stroke-width:2}
     .calendar-tooltip{position:fixed;z-index:50;max-width:calc(100vw - 16px);padding:6px 9px;border:1px solid #3a3a3a;border-radius:5px;background:#171717;color:#eee;box-shadow:0 4px 18px #0009;font:11px var(--mono);white-space:nowrap;pointer-events:none}.calendar-tooltip[hidden]{display:none}
     .primary-nav a:hover,.primary-nav a[aria-current="page"]{color:#f3f3f3}
     .top-actions{gap:14px}.search-button{font:13px var(--sans);height:38px;padding:0 14px;background:#101010;border-color:#252525;color:#aaa}.search-button kbd{font:11px var(--mono);background:#232323;border-radius:4px;padding:2px 5px;color:#ccc}
@@ -48,6 +48,7 @@
     .profile-links a:first-child{color:#d9ffe7;border-color:#376c4d;background:#102218;padding:8px 13px;font-size:12px}
     .profile-links a:first-child:hover{background:#153b26;color:#fff}
     #leetcode-panel [hidden]{display:none!important}
+    #github-panel [hidden]{display:none!important}
     .profile:after{content:"";position:absolute;z-index:0;bottom:0;left:50%;transform:translateX(-50%);width:100vw;height:30px;border-top:1px solid #282828;border-bottom:1px solid #282828;background:repeating-linear-gradient(135deg,transparent 0 5px,#202020 5px 6px)}
     .section{padding:28px 0 30px}.section h2{font-size:36px;letter-spacing:-.045em;margin-bottom:24px}.about-copy p{font-size:16px;line-height:1.55;color:#aaa;margin-bottom:16px}.about-copy p:before{margin-right:16px;color:#555}
     .activity-switch{display:flex;gap:20px;border-bottom:1px solid #242424;margin-bottom:14px}.activity-tab{appearance:none;border:0;border-bottom:2px solid transparent;background:none;padding:9px 0 10px;color:#888;cursor:pointer;font-size:14px}.activity-tab[aria-selected="true"]{color:#f1f1f1;border-color:#e6e6e6}.activity-tab:hover{color:#fff}
@@ -90,8 +91,10 @@
     <section class="section" id="activity"><div class="activity-head"><h2>Coding Activity</h2><span class="activity-caption" id="activity-handle">@tharunnaidug</span></div>
       <div class="activity-switch" role="tablist" aria-label="Choose coding activity"><button class="activity-tab" type="button" role="tab" id="github-tab" aria-selected="true" aria-controls="github-panel" data-activity="github">GitHub</button><button class="activity-tab" type="button" role="tab" id="leetcode-tab" aria-selected="false" aria-controls="leetcode-panel" data-activity="leetcode">LeetCode</button></div>
       <div class="activity-panel" id="github-panel" role="tabpanel" aria-labelledby="github-tab">
-        <div class="activity-frame"><img src="https://ghchart.rshah.org/2f9e67/tharunnaidug" alt="GitHub contribution calendar for tharunnaidug" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><p class="empty" hidden>Contribution activity is unavailable right now. <a href="https://github.com/tharunnaidug" target="_blank" rel="noreferrer">View GitHub profile ↗</a></p></div>
-        <div class="activity-legend"><span>Contribution calendar · GitHub public profile</span><a href="https://github.com/tharunnaidug" target="_blank" rel="noreferrer">View profile ↗</a></div>
+        <p id="github-state" class="leetcode-loading" role="status" aria-live="polite">Loading GitHub activity…</p>
+        <div id="github-frame" class="activity-frame" aria-busy="true" hidden></div>
+        <div class="calendar-legend" id="github-legend" hidden><span>Daily contributions · API date: UTC</span><span class="calendar-levels" aria-label="Fewer contributions to more contributions"><span>Less</span><i></i><i></i><i></i><i></i><i></i><span>More</span></span></div>
+        <p class="stats-line" id="github-stats" hidden></p><p class="stats-line" id="github-source" hidden></p>
         <div id="repo-list" class="repos" aria-live="polite" aria-label="Public repositories"></div>
       </div>
       <div class="activity-panel" id="leetcode-panel" role="tabpanel" aria-labelledby="leetcode-tab" hidden>
@@ -130,6 +133,8 @@
     function renderRepos(rows){const root=document.getElementById('repo-list');root.replaceChildren();rows.filter(r=>!r.fork).slice(0,4).forEach(r=>{const item=document.createElement('article');item.className='repo';const link=document.createElement('a');link.href=r.html_url;link.target='_blank';link.rel='noreferrer';link.textContent=r.name+' ↗';const p=document.createElement('p');p.textContent=r.description||'Public repository';const meta=document.createElement('div');meta.className='repo-meta';meta.textContent=[r.language,r.stargazers_count?`${r.stargazers_count} stars`:null].filter(Boolean).join(' · ')||'Public repository';item.append(link,p,meta);root.append(item)})}
     const repoCacheKey='tarun-github-repos-v1';let cachedRepos;try{cachedRepos=JSON.parse(localStorage.getItem(repoCacheKey)||'null')}catch{}if(cachedRepos?.expires>Date.now()&&Array.isArray(cachedRepos.rows)){renderRepos(cachedRepos.rows)}else{fetch('https://api.github.com/users/tharunnaidug/repos?sort=updated&per_page=10',{headers:{Accept:'application/vnd.github+json'}}).then(r=>{if(!r.ok)throw new Error('GitHub response unavailable');return r.json()}).then(rows=>{renderRepos(rows);try{localStorage.setItem(repoCacheKey,JSON.stringify({expires:Date.now()+6*60*60*1000,rows}))}catch{}}).catch(()=>{const root=document.getElementById('repo-list');root.innerHTML='<p class="empty">Public repositories are unavailable right now. <a href="https://github.com/tharunnaidug" target="_blank" rel="noreferrer">Open GitHub ↗</a></p>'})}
   </script>
+  <script src="activity-calendar.js"></script>
+  <script src="github.js"></script>
   <script src="leetcode.js"></script>
 </body>
 </html>
