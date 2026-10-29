@@ -29,15 +29,15 @@ def fetch_activity() -> dict:
     for item in entries:
         if not isinstance(item, dict):
             raise RuntimeError("LeetCode API returned a malformed calendar entry")
-        date = item.get("date")
+        day_date = item.get("date")
         count = item.get("count")
         level = item.get("level")
-        if not isinstance(date, str) or not isinstance(count, int) or count < 0:
+        if not isinstance(day_date, str) or not isinstance(count, int) or count < 0:
             raise RuntimeError("LeetCode API returned an invalid date or submission count")
         if not isinstance(level, int) or level < 0 or level > 4:
             raise RuntimeError("LeetCode API returned an invalid contribution level")
-        dates.append(date)
-        activity.append({"date": date, "count": count, "level": level})
+        dates.append(day_date)
+        activity.append({"date": day_date, "count": count, "level": level})
 
     if dates != sorted(set(dates)):
         raise RuntimeError("LeetCode API calendar dates are duplicated or unordered")
