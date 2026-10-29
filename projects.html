@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Projects</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -121,26 +121,77 @@
     .projects-grid { grid-template-columns: 1fr; }
     footer { flex-direction: column; gap: 1rem; padding: 1.5rem; text-align: center; }
   }
+  /* Profile-first editorial layout, matching the portfolio home page. */
+  :root { --bg:#0b0b0b; --bg2:#101010; --bg3:#141414; --accent:#58d68d; --accent2:#58d68d; --text:#eee; --muted:#8b8b8b; --border:#252525; }
+  nav { padding:0 max(16px,calc((100vw - 920px)/2)); height:58px; background:rgba(11,11,11,.92); backdrop-filter:blur(14px); }
+  .nav-logo { letter-spacing:-.04em; }
+  .nav-links a:hover,.nav-links a.active { color:var(--accent); }
+  .nav-cta { color:var(--accent); border-color:#376c4d; border-radius:5px; }
+  .nav-cta:hover { background:var(--accent); border-color:var(--accent); }
+  .page-header { max-width:680px; margin:auto; padding:8rem 0 2.5rem; }
+  .hero-bg-grid { background-image:radial-gradient(#262626 1.2px,transparent 1.3px); background-size:14px 14px; mask-image:linear-gradient(to bottom,#000 25%,transparent 100%); }
+  .page-eyebrow { color:var(--accent); }
+  .page-title { font-size:clamp(2.5rem,6vw,3.7rem); }
+  .page-title span { color:var(--accent); }
+  .filter-bar { max-width:680px; margin:auto; padding:1.2rem 0; background:transparent; }
+  .filter-btn { border-radius:4px; }
+  .filter-btn.active { background:var(--accent); }
+  .projects-section { max-width:680px; margin:auto; }
+  .projects-grid { grid-template-columns:1fr; gap:0; background:transparent; }
+  .project-card { border-top:1px solid var(--border); padding:1.35rem 0; background:var(--bg); }
+  .project-card:hover { background:var(--bg2); }
+  .project-type { color:var(--accent); }
+  .project-type::before { background:var(--accent); }
+  .project-card-arrow { top:1.4rem; right:0; }
+  .project-image { display:block; width:100%; aspect-ratio:16/8; object-fit:cover; object-position:top; margin:0 0 1.25rem; border:1px solid #242424; background:#111; }
+  .project-links { display:flex; gap:8px; margin-top:1.1rem; }
+  .project-link { display:inline-flex; align-items:center; padding:.38rem .68rem; border:1px solid #303030; border-radius:4px; color:#aaa; text-decoration:none; font:11px var(--mono); }
+  .project-link:hover { border-color:var(--accent); color:var(--accent); }
+  footer { max-width:680px; margin:auto; background:var(--bg); }
+  @media(max-width:700px) { .page-header,.filter-bar,.projects-section,footer { padding-left:16px; padding-right:16px; } .page-header { padding-top:7rem; } }
+  :root { --sans:'Inter',ui-sans-serif,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace; }
+  body { font-family:var(--sans); font-weight:400; }
+  nav.topbar { height:70px; padding:0; justify-content:center; position:sticky; background:rgba(8,8,8,.96); }
+  .topbar-inner { width:min(950px,100%); height:100%; padding:0 30px; display:flex; align-items:center; border-left:1px solid #1a1a1a; border-right:1px solid #1a1a1a; }
+  .brand { margin-right:auto; font:700 19px var(--sans); letter-spacing:-.045em; color:#eee; }
+  .primary-nav { display:flex; gap:24px; align-items:center; margin-right:24px; }
+  .primary-nav a { color:#aaa; font:15px var(--sans); letter-spacing:0; text-decoration:none; }
+  .primary-nav a { font-family:var(--mono); font-size:14px; }
+  .primary-nav a[aria-current="page"],.primary-nav a:hover { color:#f3f3f3; }
+  .top-actions { display:flex; align-items:center; }
+  .theme-button { width:36px; height:36px; border:0; background:none; color:#ccc; font-size:18px; cursor:pointer; }
+  .page-header { max-width:890px; padding:7rem 0 2rem; border-bottom:1px solid var(--border); }
+  .page-title { font-family:var(--sans); font-weight:700; letter-spacing:-.045em; }
+  .page-title span { color:var(--accent); }
+  .page-count,.page-eyebrow,.project-type,.project-tag,.filter-btn { font-family:var(--mono); }
+  .filter-bar,.projects-section { max-width:890px; }
+  .filter-bar { border-bottom:1px solid var(--border); }
+  footer { max-width:890px; }
+  body.theme-light { background:#f5f5f3; color:#171717; }
+  body.theme-light nav.topbar { background:rgba(245,245,243,.96); border-color:#ddd; }
+  body.theme-light .brand,body.theme-light .primary-nav a[aria-current="page"] { color:#171717; }
+  body.theme-light .project-card { background:#f5f5f3; }
+  body.theme-light .project-card:hover { background:#fff; }
+  body.theme-light .project-image { border-color:#ddd; background:#fff; }
+  body.theme-light .project-link { color:#555; border-color:#ccc; }
+  @media(max-width:620px) { nav.topbar { height:62px; } .topbar-inner { padding:0 16px; } .brand { font-size:16px; } .primary-nav { gap:14px; margin-right:12px; } .primary-nav a { font-size:13px; } .page-header { padding-top:6.5rem; } }
 </style>
 </head>
 <body>
 
-<nav>
-  <a href="index.html" class="nav-logo">TG<span>.</span></a>
-  <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="index.html#about">About</a></li>
-    <li><a href="#" class="active">Works</a></li>
-    <li><a href="index.html#contact">Contact</a></li>
-  </ul>
-  <a href="resume.pdf" class="nav-cta">RESUME ↗</a>
+<nav class="topbar" aria-label="Main navigation">
+  <div class="topbar-inner">
+    <a class="brand" href="https://tarunnaidu.tech/">tarunnaidu</a>
+    <div class="primary-nav"><a href="https://tarunnaidu.tech/">Home</a><a href="projects.html" aria-current="page">Projects</a><a href="contact.html">Contact</a></div>
+    <div class="top-actions"><button class="icon-button theme-button" id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">☾</button></div>
+  </div>
 </nav>
 
 <div class="page-header">
   <div class="hero-bg-grid"></div>
   <div class="page-eyebrow">ALL PROJECTS</div>
   <h1 class="page-title">Everything<br>I've <span>built</span></h1>
-  <p class="page-count">10+ projects — MERN Stack,Front End</p>
+  <p class="page-count">11 projects · Full-stack and frontend</p>
 </div>
 
 <div class="filter-bar">
@@ -153,8 +204,17 @@
 <section class="projects-section">
   <div class="projects-grid" id="projects-grid">
 
-    <a class="project-card" href="https://agritrade-three.vercel.app" target="_blank" data-cat="mern">
-      <span class="project-card-arrow">↗</span>
+    <article class="project-card" data-cat="fullstack">
+      <div class="project-type">FULL STACK · SIMULATION</div>
+      <div class="project-title">Load Balancer Simulator</div>
+      <div class="project-desc">Interactive load-balancing simulation with Round Robin and Least Connections algorithms, live server updates, and visualized request metrics.</div>
+      <div class="project-tags"><span class="project-tag">#React</span><span class="project-tag">#Node.js</span><span class="project-tag">#Express</span><span class="project-tag">#Socket.IO</span></div>
+      <div class="project-links"><a class="project-link" href="https://github.com/tharunnaidug/loadbalancer" target="_blank" rel="noreferrer">GitHub ↗</a></div>
+    </article>
+
+    <article class="project-card" data-cat="mern">
+<img class="project-image" src="img/agritrade.png" alt="Agritrade screenshot" loading="lazy">
+<span class="project-card-arrow">↗</span>
       <div class="project-type">MERN FULL STACK</div>
       <div class="project-title">Agritrade</div>
       <div class="project-desc">Agricultural marketplace with real-time auction bidding. Integrated Razorpay payments and WebSocket connections — final-year college project.</div>
@@ -165,10 +225,12 @@
         <span class="project-tag">#React</span>
         <span class="project-tag">#Node.js</span>
       </div>
-    </a>
+<div class="project-links"><a class="project-link" href="https://agritrade-three.vercel.app" target="_blank" rel="noreferrer">Live ↗</a><a class="project-link" href="https://github.com/tharunnaidug/agritrade" target="_blank" rel="noreferrer">GitHub ↗</a></div>
+</article>
 
-    <a class="project-card" href="https://ecom-frontend-git-main-tharunnaidugs-projects.vercel.app/" target="_blank" data-cat="mern">
-      <span class="project-card-arrow">↗</span>
+    <article class="project-card" data-cat="mern">
+<img class="project-image" src="img/mern.png" alt="MERN E-Commerce screenshot" loading="lazy">
+<span class="project-card-arrow">↗</span>
       <div class="project-type">MERN FULL STACK</div>
       <div class="project-title">MERN E-Commerce</div>
       <div class="project-desc">Full e-commerce website with Razorpay payment gateway. Bootstrap-styled storefront backed by a Node/Express REST API. (Gateway not live — API key not included.)</div>
@@ -178,10 +240,12 @@
         <span class="project-tag">#Bootstrap</span>
         <span class="project-tag">#MongoDB</span>
       </div>
-    </a>
+<div class="project-links"><a class="project-link" href="https://ecom-frontend-gold-gamma.vercel.app" target="_blank" rel="noreferrer">Live ↗</a><a class="project-link" href="https://github.com/tharunnaidug/Ecom" target="_blank" rel="noreferrer">GitHub ↗</a></div>
+</article>
 
-    <a class="project-card" href="https://chatapp-h0mo.onrender.com/" target="_blank" data-cat="mern">
-      <span class="project-card-arrow">↗</span>
+    <article class="project-card" data-cat="mern">
+<img class="project-image" src="img/chat.png" alt="MERN Chat App screenshot" loading="lazy">
+<span class="project-card-arrow">↗</span>
       <div class="project-type">MERN FULL STACK</div>
       <div class="project-title">MERN Chat App</div>
       <div class="project-desc">Real-time messaging application using Socket.io for live message transfer, MongoDB for persistence, and a Tailwind-styled React frontend.</div>
@@ -191,10 +255,12 @@
         <span class="project-tag">#Tailwind</span>
         <span class="project-tag">#MongoDB</span>
       </div>
-    </a>
+<div class="project-links"><a class="project-link" href="https://chatapp-h0mo.onrender.com/" target="_blank" rel="noreferrer">Live ↗</a><a class="project-link" href="https://github.com/tharunnaidug/chatApp" target="_blank" rel="noreferrer">GitHub ↗</a></div>
+</article>
 
-    <a class="project-card" href="https://ytdownloader-ten.vercel.app/" target="_blank" data-cat="fullstack">
-      <span class="project-card-arrow">↗</span>
+    <article class="project-card" data-cat="fullstack">
+<img class="project-image" src="img/yt.png" alt="YT Downloader screenshot" loading="lazy">
+<span class="project-card-arrow">↗</span>
       <div class="project-type">FULL STACK</div>
       <div class="project-title">YT Downloader</div>
       <div class="project-desc">YouTube content downloader powered by yt-dlp. Node/Express backend handles the API connections and yt-dl package pipeline. Deployed on Vercel.</div>
@@ -204,10 +270,12 @@
         <span class="project-tag">#yt-dlp</span>
         <span class="project-tag">#npm</span>
       </div>
-    </a>
+<div class="project-links"><a class="project-link" href="https://ytdownloader-ten.vercel.app/" target="_blank" rel="noreferrer">Live ↗</a><a class="project-link" href="https://github.com/tharunnaidug/ytdownloader" target="_blank" rel="noreferrer">GitHub ↗</a></div>
+</article>
 
-    <a class="project-card" href="https://downloader-lf5q-p4agt5b1c-tharunnaidugs-projects.vercel.app/" target="_blank" data-cat="fullstack">
-      <span class="project-card-arrow">↗</span>
+    <article class="project-card" data-cat="fullstack">
+<img class="project-image" src="img/down.png" alt="Social Media Downloader screenshot" loading="lazy">
+<span class="project-card-arrow">↗</span>
       <div class="project-type">FULL STACK (API)</div>
       <div class="project-title">Social Media Downloader</div>
       <div class="project-desc">Downloads content from social media platforms using third-party APIs. Node.js backend deployed on Vercel handling API connections.</div>
@@ -217,10 +285,12 @@
         <span class="project-tag">#API</span>
         <span class="project-tag">#Backend</span>
       </div>
-    </a>
+<div class="project-links"><a class="project-link" href="https://downloader-delta.vercel.app" target="_blank" rel="noreferrer">Live ↗</a><a class="project-link" href="https://github.com/tharunnaidug/downloader" target="_blank" rel="noreferrer">GitHub ↗</a></div>
+</article>
 
-    <a class="project-card" href="https://tharunnaidug.github.io/restaurant/" target="_blank" data-cat="frontend">
-      <span class="project-card-arrow">↗</span>
+    <article class="project-card" data-cat="frontend">
+<img class="project-image" src="img/rest.png" alt="Restaurant Page screenshot" loading="lazy">
+<span class="project-card-arrow">↗</span>
       <div class="project-type">FRONT END</div>
       <div class="project-title">Restaurant Page</div>
       <div class="project-desc">Responsive restaurant landing page with a Swiper.js image carousel. Pure HTML, CSS, and Vanilla JS — focused on layout and visual presentation.</div>
@@ -230,10 +300,12 @@
         <span class="project-tag">#CSS</span>
         <span class="project-tag">#Frontend</span>
       </div>
-    </a>
+<div class="project-links"><a class="project-link" href="https://tharunnaidug.github.io/restaurant/" target="_blank" rel="noreferrer">Live ↗</a><a class="project-link" href="https://github.com/tharunnaidug/restaurant" target="_blank" rel="noreferrer">GitHub ↗</a></div>
+</article>
 
-    <a class="project-card" href="https://tharunnaidug.github.io/quiz/" target="_blank" data-cat="frontend">
-      <span class="project-card-arrow">↗</span>
+    <article class="project-card" data-cat="frontend">
+<img class="project-image" src="img/quiz.png" alt="Quiz App screenshot" loading="lazy">
+<span class="project-card-arrow">↗</span>
       <div class="project-type">FRONT END</div>
       <div class="project-title">Quiz App</div>
       <div class="project-desc">Offline quiz with a countdown timer. Built to practise JavaScript logic and DOM manipulation. Clean UI with score tracking.</div>
@@ -243,10 +315,12 @@
         <span class="project-tag">#CSS</span>
         <span class="project-tag">#Frontend</span>
       </div>
-    </a>
+<div class="project-links"><a class="project-link" href="https://tharunnaidug.github.io/quiz/" target="_blank" rel="noreferrer">Live ↗</a><a class="project-link" href="https://github.com/tharunnaidug/quiz" target="_blank" rel="noreferrer">GitHub ↗</a></div>
+</article>
 
-    <a class="project-card" href="https://tharunnaidug.github.io/todo/" target="_blank" data-cat="frontend">
-      <span class="project-card-arrow">↗</span>
+    <article class="project-card" data-cat="frontend">
+<img class="project-image" src="img/todo.png" alt="Todo List screenshot" loading="lazy">
+<span class="project-card-arrow">↗</span>
       <div class="project-type">FRONT END</div>
       <div class="project-title">Todo List</div>
       <div class="project-desc">Simple but solid todo app using Vanilla JS with localStorage persistence. Tasks survive page refreshes — a classic foundations project.</div>
@@ -256,10 +330,12 @@
         <span class="project-tag">#CSS</span>
         <span class="project-tag">#Frontend</span>
       </div>
-    </a>
+<div class="project-links"><a class="project-link" href="https://tharunnaidug.github.io/todo/" target="_blank" rel="noreferrer">Live ↗</a><a class="project-link" href="https://github.com/tharunnaidug/todo" target="_blank" rel="noreferrer">GitHub ↗</a></div>
+</article>
 
-    <a class="project-card" href="https://tharunnaidug.github.io/rockpaper/" target="_blank" data-cat="frontend">
-      <span class="project-card-arrow">↗</span>
+    <article class="project-card" data-cat="frontend">
+<img class="project-image" src="img/rps.png" alt="Rock Paper Scissors screenshot" loading="lazy">
+<span class="project-card-arrow">↗</span>
       <div class="project-type">FRONT END</div>
       <div class="project-title">Rock Paper Scissors</div>
       <div class="project-desc">Classic game built with Vanilla JS. Plays against the computer with random moves, score tracking, and clean game-state logic.</div>
@@ -269,10 +345,12 @@
         <span class="project-tag">#Offline</span>
         <span class="project-tag">#Frontend</span>
       </div>
-    </a>
+<div class="project-links"><a class="project-link" href="https://tharunnaidug.github.io/rockpaper/" target="_blank" rel="noreferrer">Live ↗</a><a class="project-link" href="https://github.com/tharunnaidug/rockpaper" target="_blank" rel="noreferrer">GitHub ↗</a></div>
+</article>
 
-    <a class="project-card" href="https://tharunnaidug.github.io/passwordgen/" target="_blank" data-cat="frontend">
-      <span class="project-card-arrow">↗</span>
+    <article class="project-card" data-cat="frontend">
+<img class="project-image" src="img/pass.png" alt="Password Generator screenshot" loading="lazy">
+<span class="project-card-arrow">↗</span>
       <div class="project-type">FRONT END</div>
       <div class="project-title">Password Generator</div>
       <div class="project-desc">Generates secure random passwords with configurable length and character sets. Built with Vanilla JS — a fun and practical utility project.</div>
@@ -282,7 +360,8 @@
         <span class="project-tag">#CSS</span>
         <span class="project-tag">#Frontend</span>
       </div>
-    </a>
+<div class="project-links"><a class="project-link" href="https://tharunnaidug.github.io/passwordgen/" target="_blank" rel="noreferrer">Live ↗</a><a class="project-link" href="https://github.com/tharunnaidug/passwordgen" target="_blank" rel="noreferrer">GitHub ↗</a></div>
+</article>
 
   </div>
 </section>
@@ -313,6 +392,10 @@
         card.style.display = show ? 'flex' : 'none';
       });
     });
+  });
+  document.getElementById('theme-toggle').addEventListener('click', event => {
+    const light = document.body.classList.toggle('theme-light');
+    event.currentTarget.textContent = light ? '☀' : '☾';
   });
 </script>
 </body>

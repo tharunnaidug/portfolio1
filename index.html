@@ -1,383 +1,132 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tarun G </title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #0a0a0a; --bg2: #111111; --bg3: #181818;
-    --accent: #e8ff48; --accent2: #48ffd4;
-    --text: #f0ede8; --muted: #888880; --border: #252525;
-    --syne: 'Syne', sans-serif; --mono: 'DM Mono', monospace; --sans: 'DM Sans', sans-serif;
-  }
-  html { scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--text); font-family: var(--sans); font-weight: 300; line-height: 1.6; overflow-x: hidden; }
-
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 1.25rem 3rem;
-    background: rgba(10,10,10,0.85); backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-  }
-  .nav-logo { font-family: var(--syne); font-weight: 800; font-size: 1.1rem; letter-spacing: -0.02em; color: var(--text); text-decoration: none; }
-  .nav-logo span { color: var(--accent); }
-  .nav-links { display: flex; gap: 2rem; list-style: none; }
-  .nav-links a { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); text-decoration: none; letter-spacing: 0.05em; transition: color 0.2s; }
-  .nav-links a:hover { color: var(--accent); }
-  .nav-cta { font-family: var(--mono); font-size: 0.78rem; color: var(--accent); border: 1px solid var(--accent); padding: 0.5rem 1.2rem; text-decoration: none; letter-spacing: 0.08em; transition: background 0.2s, color 0.2s; }
-  .nav-cta:hover { background: var(--accent); color: #0a0a0a; }
-
-  #home {
-    min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr;
-    align-items: center; padding: 8rem 3rem 4rem;
-    position: relative; overflow: hidden;
-  }
-  .hero-bg-grid {
-    position: absolute; inset: 0; pointer-events: none;
-    background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
-    opacity: 0.4;
-  }
-  .hero-eyebrow { font-family: var(--mono); font-size: 0.78rem; color: var(--accent2); letter-spacing: 0.15em; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem; }
-  .hero-eyebrow::before { content: ''; display: inline-block; width: 32px; height: 1px; background: var(--accent2); }
-  .hero-title { font-family: var(--syne); font-weight: 800; font-size: clamp(3rem, 6vw, 5.5rem); line-height: 1; letter-spacing: -0.03em; margin-bottom: 0.3rem; }
-  .hero-title .highlight { color: var(--accent); }
-  .hero-subtitle { font-family: var(--syne); font-weight: 400; font-size: clamp(1.4rem, 2.5vw, 2rem); color: var(--muted); margin-bottom: 2rem; letter-spacing: -0.01em; }
-  .hero-desc { font-size: 1rem; color: #aaa8a3; max-width: 420px; line-height: 1.8; margin-bottom: 2.5rem; }
-  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
-  .btn-primary { background: var(--accent); color: #0a0a0a; font-family: var(--mono); font-size: 0.82rem; font-weight: 500; letter-spacing: 0.08em; padding: 0.85rem 2rem; text-decoration: none; transition: transform 0.15s, opacity 0.15s; display: inline-block; }
-  .btn-primary:hover { transform: translateY(-2px); opacity: 0.9; }
-  .btn-secondary { border: 1px solid var(--border); color: var(--muted); font-family: var(--mono); font-size: 0.82rem; letter-spacing: 0.08em; padding: 0.85rem 2rem; text-decoration: none; transition: border-color 0.2s, color 0.2s; display: inline-block; }
-  .btn-secondary:hover { border-color: var(--muted); color: var(--text); }
-  .hero-right { display: flex; justify-content: flex-end; align-items: center; }
-  .hero-card { background: var(--bg2); border: 1px solid var(--border); padding: 2rem; width: 280px; position: relative; }
-  .hero-card::before { content: ''; position: absolute; top: -1px; left: -1px; width: 40px; height: 3px; background: var(--accent); }
-  .hero-card-label { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 1.2rem; }
-  .hero-stack { display: flex; flex-direction: column; gap: 0.6rem; }
-  .stack-item { display: flex; justify-content: space-between; align-items: center; font-size: 0.88rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
-  .stack-item:last-child { border-bottom: none; }
-  .stack-item .tech { font-family: var(--mono); font-size: 0.8rem; color: var(--text); }
-  .stack-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); }
-  .hero-socials { display: flex; gap: 1rem; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border); }
-  .social-link { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); text-decoration: none; letter-spacing: 0.05em; transition: color 0.2s; }
-  .social-link:hover { color: var(--accent); }
-
-  section { padding: 6rem 3rem; }
-  .section-label { font-family: var(--mono); font-size: 0.72rem; color: var(--accent); letter-spacing: 0.2em; margin-bottom: 1rem; }
-  .section-title { font-family: var(--syne); font-weight: 800; font-size: clamp(2rem, 4vw, 3.2rem); letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 3rem; }
-  .section-title span { color: var(--muted); }
-
-  #about { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
-  .about-text { font-size: 1rem; color: #aaa8a3; line-height: 1.9; }
-  .about-text p { margin-bottom: 1.2rem; }
-  .about-skills { display: flex; flex-direction: column; gap: 0; }
-  .skill-group { border-top: 1px solid var(--border); padding: 1.2rem 0; }
-  .skill-group:last-child { border-bottom: 1px solid var(--border); }
-  .skill-group-name { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); letter-spacing: 0.12em; margin-bottom: 0.8rem; }
-  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-  .tag { font-family: var(--mono); font-size: 0.75rem; padding: 0.3rem 0.75rem; border: 1px solid var(--border); color: var(--text); transition: border-color 0.2s, color 0.2s; }
-  .tag:hover { border-color: var(--accent); color: var(--accent); }
-  .tag.accent { border-color: var(--accent2); color: var(--accent2); }
-
-  .works-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5px; background: var(--border); }
-  .work-card { background: var(--bg); padding: 2rem 2.2rem; position: relative; overflow: hidden; transition: background 0.25s; text-decoration: none; color: inherit; display: block; }
-  .work-card:hover { background: var(--bg2); }
-  .work-card::after { content: '→'; position: absolute; top: 2rem; right: 2rem; font-size: 1.2rem; color: var(--muted); transition: transform 0.2s, color 0.2s; }
-  .work-card:hover::after { transform: translate(4px, -4px); color: var(--accent); }
-  .work-type { font-family: var(--mono); font-size: 0.7rem; color: var(--accent2); letter-spacing: 0.12em; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
-  .work-type::before { content: ''; width: 4px; height: 4px; background: var(--accent2); border-radius: 50%; display: inline-block; }
-  .work-title { font-family: var(--syne); font-weight: 700; font-size: 1.4rem; margin-bottom: 0.6rem; letter-spacing: -0.02em; }
-  .work-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.5rem; }
-  .work-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-  .work-tag { font-family: var(--mono); font-size: 0.68rem; color: var(--muted); letter-spacing: 0.06em; border: 1px solid var(--border); padding: 0.2rem 0.6rem; }
-
-  #contact { background: var(--bg2); border-top: 1px solid var(--border); }
-  .contact-inner { display: grid; grid-template-columns: 1.2fr 1fr; gap: 5rem; align-items: start; }
-  .contact-big { font-family: var(--syne); font-weight: 800; font-size: clamp(2.5rem, 5vw, 4.5rem); letter-spacing: -0.04em; line-height: 1; margin-bottom: 1.5rem; }
-  .contact-big .ac { color: var(--accent); }
-  .contact-sub { font-size: 1rem; color: var(--muted); line-height: 1.8; max-width: 380px; }
-  .contact-email { font-family: var(--mono); font-size: 0.85rem; color: var(--accent2); margin-top: 2rem; display: block; text-decoration: none; letter-spacing: 0.04em; }
-  .contact-email:hover { text-decoration: underline; }
-
-  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .form-field { display: flex; flex-direction: column; gap: 0.4rem; }
-  .form-label { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; }
-  .form-input, .form-textarea { background: var(--bg3); border: 1px solid var(--border); color: var(--text); font-family: var(--sans); font-size: 0.9rem; padding: 0.75rem 1rem; outline: none; transition: border-color 0.2s; resize: none; }
-  .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
-  .form-textarea { min-height: 120px; }
-  .form-submit { background: var(--accent); color: #0a0a0a; font-family: var(--mono); font-size: 0.82rem; font-weight: 500; letter-spacing: 0.1em; padding: 1rem 2rem; border: none; cursor: pointer; transition: opacity 0.15s, transform 0.15s; align-self: flex-start; }
-  .form-submit:hover { opacity: 0.88; transform: translateY(-1px); }
-  .form-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-  #form-result { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.06em; margin-top: 0.5rem; min-height: 1.2em; }
-  #form-result.ok { color: var(--accent2); }
-  #form-result.err { color: #ff6b6b; }
-
-  footer { padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); }
-  .footer-copy { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); letter-spacing: 0.06em; }
-  .footer-socials { display: flex; gap: 1.5rem; }
-  .footer-socials a { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); text-decoration: none; letter-spacing: 0.06em; transition: color 0.2s; }
-  .footer-socials a:hover { color: var(--accent); }
-
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-  .hero-eyebrow  { animation: fadeUp 0.6s 0.1s both; }
-  .hero-title    { animation: fadeUp 0.6s 0.22s both; }
-  .hero-subtitle { animation: fadeUp 0.6s 0.34s both; }
-  .hero-desc     { animation: fadeUp 0.6s 0.44s both; }
-  .hero-actions  { animation: fadeUp 0.6s 0.54s both; }
-  .hero-socials  { animation: fadeUp 0.6s 0.64s both; }
-  .hero-card     { animation: fadeUp 0.7s 0.3s both; }
-
-  @media (max-width: 768px) {
-    nav { padding: 1rem 1.5rem; }
-    .nav-links { display: none; }
-    #home { grid-template-columns: 1fr; padding: 5rem 1.5rem 3rem; }
-    .about-grid, .contact-inner { grid-template-columns: 1fr; }
-    .hero-right { display: none; }
-    section { padding: 4rem 1.5rem; }
-    .works-grid { grid-template-columns: 1fr; }
-    footer { flex-direction: column; gap: 1rem; padding: 1.5rem; }
-    .form-row { grid-template-columns: 1fr; }
-  }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0b0b">
+  <meta name="description" content="Tarun G is a backend-focused full-stack developer in Bengaluru, India, building practical web applications, APIs, and real-time systems.">
+  <meta property="og:title" content="Tarun G — Backend-focused Full-Stack Developer">
+  <meta property="og:description" content="Building practical web applications, APIs, and real-time systems in Bengaluru, India.">
+  <meta property="og:type" content="website">
+  <title>Tarun G — Backend-focused Full-Stack Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{color-scheme:dark;--bg:#0b0b0b;--panel:#101010;--text:#eee;--muted:#8b8b8b;--line:#252525;--green:#58d68d;--mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:76px}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.65 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}a{color:inherit}a:focus-visible,button:focus-visible{outline:2px solid var(--green);outline-offset:4px}button{font:inherit;color:inherit}
+    .topbar{height:58px;position:sticky;top:0;z-index:10;background:rgba(11,11,11,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(24px,calc((100vw - 920px)/2))}.brand{font-size:16px;font-weight:700;text-decoration:none;letter-spacing:-.04em}.top-actions{display:flex;align-items:center;gap:10px}.icon-button{height:34px;width:34px;border:1px solid transparent;background:none;border-radius:8px;color:#bbb;cursor:pointer;display:grid;place-items:center;font-size:17px}.icon-button:hover{background:#171717;border-color:var(--line)}.search-button{width:auto;padding:0 12px;display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:22px;color:#aaa;font-size:12px}.search-button kbd{font:11px var(--mono);color:#777}
+    .page{width:min(680px,calc(100% - 40px));margin:0 auto}.banner{height:154px;border-left:1px solid #191919;border-right:1px solid #191919;position:relative;background-image:radial-gradient(#262626 1.2px,transparent 1.3px);background-size:14px 14px;mask-image:linear-gradient(to bottom,#000 25%,transparent 100%);opacity:.78}.banner:before,.banner:after{content:"";position:absolute;top:50%;width:1px;height:12px;background:#333}.banner:before{left:0}.banner:after{right:0}.profile{position:relative;margin-top:-12px;padding:0 0 22px;display:flex;align-items:center;gap:18px}.avatar{width:118px;height:118px;border:1px solid #494949;border-radius:15px;padding:4px;background:#111;display:grid;place-items:center;flex:none}.avatar-inner{width:100%;height:100%;border-radius:11px;background:#171717;display:grid;place-items:center;font-size:40px;font-weight:600;letter-spacing:-.09em;color:#e9e9e9}.profile-meta{min-width:0}.profile-meta h1{font-size:21px;line-height:1.25;letter-spacing:-.04em;margin:0 0 7px;font-weight:700}.role{font-family:var(--mono);font-size:13px;color:#999;display:block}.status{font-family:var(--mono);font-size:12px;color:#aaa;display:flex;align-items:center;gap:8px;margin-top:7px}.status:before{content:"";width:6px;height:6px;border-radius:50%;background:#31cc83;box-shadow:0 0 8px #31cc8355}.profile-links{margin-left:auto;align-self:flex-end;display:flex;gap:8px}.profile-links a{font:11px var(--mono);color:#888;text-decoration:none;border:1px solid var(--line);padding:5px 8px;border-radius:5px}.profile-links a:hover{color:var(--green);border-color:#376c4d}
+    .section{border-top:1px solid var(--line);padding:23px 0 25px}.section h2{font-size:21px;line-height:1.2;margin:0 0 18px;letter-spacing:-.04em;font-weight:600}.about-copy p{margin:0 0 12px;color:#b0b0b0}.about-copy p:last-child{margin-bottom:0}.about-copy p:before{content:"•";color:#666;margin-right:14px}.connect-list{display:grid;grid-template-columns:repeat(3,1fr);gap:0 22px}.connect-list a{display:flex;align-items:center;justify-content:space-between;padding:9px 1px;color:#b7b7b7;border-bottom:1px solid #1c1c1c;text-decoration:none;font-size:13px}.connect-list a:after{content:"↗";color:#6e6e6e;font-size:12px}.connect-list a:hover{color:var(--green)}.connect-label{display:inline-flex;align-items:center;gap:10px}.connect-icon{display:block;width:17px;height:17px;color:#888;flex:none}.connect-list a:hover .connect-icon{color:var(--green)}
+    .activity-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}.activity-head h2{margin:0}.activity-caption{font:11px var(--mono);color:#888}.activity-frame{width:100%;overflow-x:auto;padding:12px 10px 9px;background:#0e0e0e;border:1px solid #202020;border-radius:6px}.activity-frame img{display:block;width:100%;min-width:520px;height:auto}.activity-legend{display:flex;justify-content:space-between;align-items:center;color:#888;font:10px var(--mono);margin-top:8px}.activity-legend a{color:var(--green);text-decoration:none}.repos{display:grid;grid-template-columns:repeat(2,1fr);gap:0 18px}.repo{padding:12px 0;border-top:1px solid #202020;min-width:0}.repo a{font-size:14px;font-weight:600;text-decoration:none;color:#ddd}.repo a:hover{color:var(--green)}.repo p{margin:4px 0 8px;color:#898989;font-size:12px;line-height:1.5}.repo-meta{font:10px var(--mono);color:#777}
+    .timeline{display:grid;gap:0}.entry{display:grid;grid-template-columns:1fr auto;gap:4px 20px;padding:0 0 17px;border-bottom:1px solid #1e1e1e;margin-bottom:16px}.entry:last-child{border:0;margin:0;padding:0}.entry h3{font-size:14px;margin:0;font-weight:600;letter-spacing:-.01em}.entry time{font:11px var(--mono);color:#888;text-align:right}.entry .sub{grid-column:1/-1;color:#999;font-size:12px}.entry .detail{grid-column:1/-1;color:#888;font-size:12px;margin-top:2px}.skill-groups{display:grid;gap:0}.skill{display:grid;grid-template-columns:140px 1fr;gap:14px;padding:12px 0;border-top:1px solid #202020}.skill:last-child{border-bottom:1px solid #202020}.skill b{font:11px var(--mono);font-weight:400;color:#8b8b8b;padding-top:2px}.skill span{font-size:13px;color:#c5c5c5}
+    .leetcode-box{display:flex;justify-content:space-between;gap:20px;align-items:center;padding:15px 16px;border:1px solid #222;border-radius:6px;background:#0e0e0e}.leetcode-box p{margin:0;color:#aaa;font-size:13px}.leetcode-box a{font:12px var(--mono);color:var(--green);text-decoration:none;white-space:nowrap}.quote{border-top:1px solid var(--line);padding:26px 12px;text-align:center;color:#9a9a9a;font-size:14px;font-style:italic}.quote span{display:block;margin-top:7px;color:#707070;font:10px var(--mono);letter-spacing:.12em}.footer{border-top:1px solid var(--line);padding:18px 0 32px;display:flex;justify-content:space-between;color:#707070;font:10px var(--mono)}
+    .calendar-svg{display:block;width:100%;min-width:560px;height:auto}.calendar-day{stroke:#111;stroke-width:1}.calendar-month,.calendar-weekday{fill:#888;font:9px var(--mono)}.stats-line{font:11px var(--mono);color:#888;margin:8px 0 0}.project-name{font-size:14px;font-weight:600;color:#ddd}.leetcode-loading,.leetcode-error{min-height:96px;display:flex;align-items:center;margin:0;color:#999;font-size:13px}.leetcode-error a{color:var(--green);margin-left:4px}.calendar-legend{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:10px;color:#888;font:10px var(--mono)}.calendar-levels{display:inline-flex;align-items:center;gap:4px}.calendar-levels i{width:9px;height:9px;border-radius:2px;background:#191919}.calendar-levels i:nth-child(2){background:#123d2b}.calendar-levels i:nth-child(3){background:#17643c}.calendar-levels i:nth-child(4){background:#239a58}.calendar-levels i:nth-child(5){background:#57d68d}
+    body.theme-light{background:#f5f5f3;color:#171717}body.theme-light .topbar{background:rgba(245,245,243,.94);border-color:#ddd}body.theme-light .brand,body.theme-light .section h2,body.theme-light .profile-meta h1{color:#171717}body.theme-light .icon-button{color:#555}body.theme-light .icon-button:hover{background:#fff}body.theme-light .avatar,body.theme-light .avatar-inner,body.theme-light .activity-frame,body.theme-light .leetcode-box{background:#fff;border-color:#ddd}body.theme-light .avatar-inner{color:#333}body.theme-light .profile-links a,body.theme-light .skill,body.theme-light .repo,body.theme-light .entry{border-color:#ddd}body.theme-light .connect-list a{border-color:#ddd;color:#555}body.theme-light .repo a,body.theme-light .project-name{color:#333}body.theme-light .repo p,body.theme-light .about-copy p,body.theme-light .entry .sub,body.theme-light .entry .detail,body.theme-light .skill span,body.theme-light .leetcode-box p{color:#666}body.theme-light .calendar-day{stroke:#fff}body.theme-light .quote,body.theme-light .footer{border-color:#ddd;color:#666}
+    dialog{width:min(440px,calc(100% - 32px));border:1px solid #333;border-radius:10px;background:#101010;color:#eee;padding:10px;box-shadow:0 24px 80px #000b}dialog::backdrop{background:#0009;backdrop-filter:blur(2px)}.search-input{width:100%;border:0;border-bottom:1px solid #292929;background:transparent;padding:12px;color:white;font:14px var(--sans);outline:none}.search-results{display:grid;padding:8px 0;max-height:280px;overflow:auto}.search-results a{padding:9px 10px;border-radius:5px;text-decoration:none;color:#aaa;font-size:13px}.search-results a:hover{background:#1b1b1b;color:#fff}.empty{padding:12px;color:#777;font-size:13px}
+    @media(max-width:620px){.topbar{padding:0 16px}.page{width:calc(100% - 32px)}.banner{height:125px}.profile{gap:13px;flex-wrap:wrap}.avatar{width:88px;height:88px;border-radius:12px}.avatar-inner{font-size:32px}.profile-meta h1{font-size:18px}.profile-links{width:100%;margin-left:0;justify-content:flex-start}.profile-links a{font-size:10px}.connect-list{grid-template-columns:repeat(2,1fr);gap:0 14px}.repos{grid-template-columns:1fr}.skill{grid-template-columns:105px 1fr;gap:10px}.activity-frame img{min-width:500px}.section{padding:20px 0}.section h2{font-size:19px}.footer{gap:8px;flex-wrap:wrap}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+    /* Match the reference's wider framed profile, crisp sans typography, and quiet mono details. */
+    :root{--sans:'Inter',ui-sans-serif,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,monospace}
+    .topbar{height:70px;padding:0;justify-content:center;background:rgba(8,8,8,.96)}
+    .topbar-inner{width:min(950px,100%);height:100%;padding:0 30px;display:flex;align-items:center;border-left:1px solid #1a1a1a;border-right:1px solid #1a1a1a}
+    .brand{font-size:19px;font-weight:700;letter-spacing:-.045em;white-space:nowrap}
+    .primary-nav{display:flex;gap:24px;margin-left:auto;margin-right:26px;height:100%;align-items:center}
+    .primary-nav a{font-size:15px;text-decoration:none;color:#aaa;white-space:nowrap}
+    .primary-nav a{font-family:var(--mono);font-size:14px}
+    #leetcode-frame .calendar-day{cursor:help}#leetcode-frame .calendar-day:hover,#leetcode-frame .calendar-day:focus{stroke:#eee;stroke-width:2}
+    .calendar-tooltip{position:fixed;z-index:50;max-width:calc(100vw - 16px);padding:6px 9px;border:1px solid #3a3a3a;border-radius:5px;background:#171717;color:#eee;box-shadow:0 4px 18px #0009;font:11px var(--mono);white-space:nowrap;pointer-events:none}.calendar-tooltip[hidden]{display:none}
+    .primary-nav a:hover,.primary-nav a[aria-current="page"]{color:#f3f3f3}
+    .top-actions{gap:14px}.search-button{font:13px var(--sans);height:38px;padding:0 14px;background:#101010;border-color:#252525;color:#aaa}.search-button kbd{font:11px var(--mono);background:#232323;border-radius:4px;padding:2px 5px;color:#ccc}
+    .top-actions:after{content:"";height:26px;width:1px;background:#252525;order:1}.top-actions #theme-toggle{order:2;margin-left:0}
+    .page{width:min(950px,calc(100% - 32px));padding:0 30px;border-left:1px solid #1a1a1a;border-right:1px solid #1a1a1a}
+    .banner{height:200px;margin:0 -30px;border-left:0;border-right:0;border-bottom:1px solid #222;background-size:14px 14px;mask-image:linear-gradient(to bottom,#000 35%,transparent 100%);opacity:1}
+    .profile{margin-top:30px;min-height:190px;padding:0 0 46px;gap:30px;align-items:center}
+    .avatar{width:160px;height:160px;border-radius:16px;padding:5px}.avatar-inner{border-radius:12px;font-size:48px}.avatar-photo{width:100%;height:100%;display:block;object-fit:cover;object-position:center 35%;border-radius:11px}
+    .profile-meta h1{font-size:36px;letter-spacing:-.045em;margin-bottom:8px}.role{font:17px var(--mono)}.status{font:14px var(--mono);margin-top:9px}
+    .profile-links{display:none}
+    .profile:after{content:"";position:absolute;z-index:0;bottom:0;left:50%;transform:translateX(-50%);width:100vw;height:30px;border-top:1px solid #282828;border-bottom:1px solid #282828;background:repeating-linear-gradient(135deg,transparent 0 5px,#202020 5px 6px)}
+    .section{padding:28px 0 30px}.section h2{font-size:36px;letter-spacing:-.045em;margin-bottom:24px}.about-copy p{font-size:16px;line-height:1.55;color:#aaa;margin-bottom:16px}.about-copy p:before{margin-right:16px;color:#555}
+    .activity-switch{display:flex;gap:20px;border-bottom:1px solid #242424;margin-bottom:14px}.activity-tab{appearance:none;border:0;border-bottom:2px solid transparent;background:none;padding:9px 0 10px;color:#888;cursor:pointer;font-size:14px}.activity-tab[aria-selected="true"]{color:#f1f1f1;border-color:#e6e6e6}.activity-tab:hover{color:#fff}
+    .activity-frame{border-radius:0;background:transparent;border:0;padding:10px 0}.activity-legend{font-size:11px}.activity-fallback{margin:0;color:#888;font-size:13px}.activity-panel[hidden]{display:none!important}
+    @media(max-width:680px){.topbar{height:62px}.topbar-inner{padding:0 16px}.brand{font-size:16px}.primary-nav{gap:14px;margin-right:12px}.primary-nav a{font-size:13px}.top-actions{gap:7px}.search-button{font-size:0;width:36px;padding:0;justify-content:center}.search-button kbd{display:none}.page{width:calc(100% - 24px);padding:0 18px}.banner{margin:0 -18px;height:160px}.profile{margin-top:20px;min-height:130px;padding-bottom:40px;gap:16px}.avatar{width:112px;height:112px}.avatar-inner{font-size:36px}.profile-meta h1{font-size:24px}.role{font-size:12px}.status{font-size:10px}.section{padding:22px 0}.section h2{font-size:27px;margin-bottom:18px}.about-copy p{font-size:14px}.connect-list{grid-template-columns:repeat(2,1fr)}.activity-frame img,.calendar-svg{min-width:520px}}
+  </style>
 </head>
 <body>
-
-<nav>
-  <a href="#home" class="nav-logo">TG<span>.</span></a>
-  <ul class="nav-links">
-    <li><a href="#home">Home</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#works">Works</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <a href="resume.pdf" class="nav-cta">RESUME ↗</a>
-</nav>
-
-<section id="home">
-  <div class="hero-bg-grid"></div>
-  <div class="hero-left">
-    <div class="hero-eyebrow">MERN Stack Developer &amp; MCA Student</div>
-    <h1 class="hero-title">
-      Tarun<br>
-      <span class="highlight">G</span>
-    </h1>
-    <p class="hero-subtitle">Building full-stack experiences</p>
-    <p class="hero-desc">
-      I design and develop web applications using the MERN stack — from real-time auction platforms to chat apps. MCA student at BMS College of Engineering, Bengaluru.
-    </p>
-    <div class="hero-actions">
-      <a href="#works" class="btn-primary">VIEW WORKS</a>
-      <a href="#contact" class="btn-secondary">GET IN TOUCH</a>
-    </div>
-    <div class="hero-socials">
-      <a href="https://github.com/tharunnaidug" class="social-link" target="_blank">GitHub</a>
-      <a href="https://www.linkedin.com/in/tarun-g-54b37a251" class="social-link" target="_blank">LinkedIn</a>
-      <a href="https://leetcode.com/u/tarunnaidug/" class="social-link" target="_blank">LeetCode</a>
-    </div>
-  </div>
-  <div class="hero-right">
-    <div class="hero-card">
-      <div class="hero-card-label">// CURRENT STACK</div>
-      <div class="hero-stack">
-        <div class="stack-item"><span class="tech">MongoDB</span><span class="stack-dot"></span></div>
-        <div class="stack-item"><span class="tech">Express.js</span><span class="stack-dot"></span></div>
-        <div class="stack-item"><span class="tech">React.js</span><span class="stack-dot"></span></div>
-        <div class="stack-item"><span class="tech">Node.js</span><span class="stack-dot"></span></div>
-        <div class="stack-item"><span class="tech">Socket.io</span><span class="stack-dot"></span></div>
-        <div class="stack-item"><span class="tech">C++ / DSA</span><span class="stack-dot"></span></div>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="https://tarunnaidu.tech/" aria-label="Tarun G home">tarunnaidu</a>
+      <nav class="primary-nav" aria-label="Main navigation"><a href="https://tarunnaidu.tech/" aria-current="page">Home</a><a href="projects.html">Projects</a><a href="contact.html">Contact</a></nav>
+      <div class="top-actions">
+        <button class="icon-button search-button" id="open-search" aria-label="Search this page"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="m10.5 10.5 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Search <kbd>Ctrl K</kbd></button>
+        <button class="icon-button" id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">☾</button>
       </div>
     </div>
-  </div>
-</section>
-
-<section id="about">
-  <div class="section-label">ABOUT</div>
-  <h2 class="section-title">Who I am <span>&amp; what I do</span></h2>
-  <div class="about-grid">
-    <div class="about-text">
-      <p>I'm Tarun G, currently pursuing MCA at BMS College of Engineering, Bengaluru. My passion is building production-grade web applications with the MERN stack — I love solving real problems with clean, performant code.</p>
-      <p>I've built everything from real-time auction platforms handling WebSocket connections and Razorpay payments, to chat apps, YouTube downloaders and front-end projects. I care about shipping things that actually work.</p>
-      <p>On the side, I sharpen my problem-solving with C++ on LeetCode, keeping my fundamentals tight.</p>
-    </div>
-    <div class="about-skills">
-      <div class="skill-group">
-        <div class="skill-group-name">FULL-STACK</div>
-        <div class="skill-tags">
-          <span class="tag accent">MongoDB</span>
-          <span class="tag accent">Express.js</span>
-          <span class="tag accent">React.js</span>
-          <span class="tag accent">Node.js</span>
-        </div>
+  </header>
+  <main class="page" id="home">
+    <div class="banner" aria-hidden="true"></div>
+    <section class="profile" aria-labelledby="profile-name">
+      <div class="avatar"><img class="avatar-photo" src="img/tarun.jpg" alt="Portrait of Tarun G"></div>
+      <div class="profile-meta"><h1 id="profile-name">Tarun G</h1><span class="role">Backend-focused Full-Stack Developer</span><span class="status">Building and learning · Bengaluru, India</span></div>
+      <div class="profile-links"><a href="resume.pdf" target="_blank" rel="noreferrer">Resume ↗</a><a href="mailto:tarunnaidug5@gmail.com">Email ↗</a></div>
+    </section>
+    <section class="section" id="about"><h2>About</h2><div class="about-copy">
+      <p>I’m Tarun G, a backend-focused full-stack developer in Bengaluru. I build practical web applications, APIs, and real-time systems, with a focus on making the parts behind the interface reliable and useful.</p>
+      <p>I’m pursuing a Master of Computer Applications at B.M.S. College of Engineering after completing a BCA at Nisarga College of Management. I enjoy learning by building, tracing a problem through the stack, and keeping the solution clear.</p>
+      <p>From September to December 2025, I worked as a MERN Stack Developer Intern at AndroWebsTech Pvt Ltd. My recent work includes an agricultural marketplace with live bidding and payment integration.</p>
+    </div></section>
+    <section class="section" id="connect"><h2>Connect</h2><div class="connect-list">
+      <a href="https://github.com/tharunnaidug" target="_blank" rel="noreferrer"><span class="connect-label"><svg class="connect-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .9a11.1 11.1 0 0 0-3.5 21.6c.6.1.8-.3.8-.6v-2.1c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.6-1.3-1.6-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 .1 2.1-.9 2.6-1.2-2.5-.3-5.2-1.3-5.2-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.9 0C16 4 17 4.3 17 4.3c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.2 5.8.4.4.8 1 .8 2v3.6c0 .3.2.7.8.6A11.1 11.1 0 0 0 12 .9Z"/></svg>GitHub</span></a>
+      <a href="https://www.linkedin.com/in/tarun-g-54b37a251" target="_blank" rel="noreferrer"><span class="connect-label"><svg class="connect-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5.2 8.7H2V22h3.2V8.7ZM3.6 2A1.9 1.9 0 1 0 3.6 5.8 1.9 1.9 0 0 0 3.6 2ZM22 14.4c0-4-2.1-5.9-4.8-5.9a4.1 4.1 0 0 0-3.7 2V8.7h-3.2V22h3.2v-6.6c0-1.7.3-3.4 2.5-3.4s2.2 2 2.2 3.5V22H22v-7.6Z"/></svg>LinkedIn</span></a>
+      <a href="mailto:tarunnaidug5@gmail.com"><span class="connect-label"><svg class="connect-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>Email</span></a>
+      <a href="resume.pdf" target="_blank" rel="noreferrer"><span class="connect-label"><svg class="connect-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>Resume</span></a>
+      <a href="https://leetcode.com/u/tarunnaidug/" target="_blank" rel="noreferrer"><span class="connect-label"><svg class="connect-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5-5 7 5 7M16 5l5 7-5 7M14 3l-4 18"/></svg>LeetCode</span></a>
+      <a href="https://www.instagram.com/tharunnaidug" target="_blank" rel="noreferrer"><span class="connect-label"><svg class="connect-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.7" r=".8" fill="currentColor" stroke="none"/></svg>Instagram</span></a>
+      <a href="https://x.com/tharunnaidu_g" target="_blank" rel="noreferrer"><span class="connect-label"><svg class="connect-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3L12 14.7 5.5 22H2.4l7.3-8.4L1.8 2h6.4l4.4 6.8L18.9 2Zm-1.1 17.8h1.7L7.2 4.1H5.4l12.4 15.7Z"/></svg>X / Twitter</span></a>
+    </div></section>
+    <section class="section" id="activity"><div class="activity-head"><h2>Coding Activity</h2><span class="activity-caption" id="activity-handle">@tharunnaidug</span></div>
+      <div class="activity-switch" role="tablist" aria-label="Choose coding activity"><button class="activity-tab" type="button" role="tab" id="github-tab" aria-selected="true" aria-controls="github-panel" data-activity="github">GitHub</button><button class="activity-tab" type="button" role="tab" id="leetcode-tab" aria-selected="false" aria-controls="leetcode-panel" data-activity="leetcode">LeetCode</button></div>
+      <div class="activity-panel" id="github-panel" role="tabpanel" aria-labelledby="github-tab">
+        <div class="activity-frame"><img src="https://ghchart.rshah.org/2f9e67/tharunnaidug" alt="GitHub contribution calendar for tharunnaidug" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><p class="empty" hidden>Contribution activity is unavailable right now. <a href="https://github.com/tharunnaidug" target="_blank" rel="noreferrer">View GitHub profile ↗</a></p></div>
+        <div class="activity-legend"><span>Contribution calendar · GitHub public profile</span><a href="https://github.com/tharunnaidug" target="_blank" rel="noreferrer">View profile ↗</a></div>
+        <div id="repo-list" class="repos" aria-live="polite" aria-label="Public repositories"></div>
       </div>
-      <div class="skill-group">
-        <div class="skill-group-name">STYLING &amp; UI</div>
-        <div class="skill-tags">
-          <span class="tag">Bootstrap</span>
-          <span class="tag">Tailwind CSS</span>
-          <span class="tag">Vanilla CSS</span>
-        </div>
+      <div class="activity-panel" id="leetcode-panel" role="tabpanel" aria-labelledby="leetcode-tab" hidden>
+        <p id="leetcode-state" class="leetcode-loading" role="status" aria-live="polite">Loading LeetCode activity…</p>
+        <div id="leetcode-frame" class="activity-frame" aria-busy="true" hidden></div>
+        <div class="calendar-legend" id="leetcode-legend" hidden><span>Daily submissions · API date: UTC</span><span class="calendar-levels" aria-label="Fewer submissions to more submissions"><span>Less</span><i></i><i></i><i></i><i></i><i></i><span>More</span></span></div>
+        <p class="stats-line" id="leetcode-stats" hidden></p><p class="stats-line" id="leetcode-source" hidden></p>
       </div>
-      <div class="skill-group">
-        <div class="skill-group-name">ALGORITHMS &amp; DSA</div>
-        <div class="skill-tags">
-          <span class="tag">C++</span>
-          <span class="tag">LeetCode</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <div class="skill-group-name">ACADEMIC LANGUAGES</div>
-        <div class="skill-tags">
-          <span class="tag">C / C++ / C#</span>
-          <span class="tag">Java</span>
-          <span class="tag">Python</span>
-          <span class="tag">R</span>
-          <span class="tag">SQL</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="works">
-  <div class="section-label">WORKS</div>
-  <h2 class="section-title">Selected <span>projects</span></h2>
-  <div class="works-grid">
-    <a class="work-card" href="https://agritrade-three.vercel.app" target="_blank">
-      <div class="work-type">MERN FULL STACK</div>
-      <div class="work-title">Agritrade</div>
-      <div class="work-desc">Agricultural marketplace with real-time auctions. Integrated Razorpay payments and WebSocket-driven bidding — final-year project.</div>
-      <div class="work-tags">
-        <span class="work-tag">#WebSocket</span><span class="work-tag">#Razorpay</span><span class="work-tag">#MongoDB</span><span class="work-tag">#React</span>
-      </div>
-    </a>
-    <a class="work-card" href="https://chatapp-h0mo.onrender.com/" target="_blank">
-      <div class="work-type">MERN FULL STACK</div>
-      <div class="work-title">MERN Chat App</div>
-      <div class="work-desc">Real-time messaging with Socket.io for live message transfer, MongoDB persistence, and Tailwind-styled UI.</div>
-      <div class="work-tags">
-        <span class="work-tag">#Socket.io</span><span class="work-tag">#React</span><span class="work-tag">#Tailwind</span><span class="work-tag">#MongoDB</span>
-      </div>
-    </a>
-    <a class="work-card" href="https://ecom-frontend-git-main-tharunnaidugs-projects.vercel.app/" target="_blank">
-      <div class="work-type">MERN FULL STACK</div>
-      <div class="work-title">MERN E-Commerce</div>
-      <div class="work-desc">Full e-commerce site with Razorpay payment gateway integration. Bootstrap-styled storefront backed by a Node/Express API.</div>
-      <div class="work-tags">
-        <span class="work-tag">#Razorpay</span><span class="work-tag">#Bootstrap</span><span class="work-tag">#React</span><span class="work-tag">#MongoDB</span>
-      </div>
-    </a>
-    <a class="work-card" href="https://ytdownloader-ten.vercel.app/" target="_blank">
-      <div class="work-type">FULL STACK</div>
-      <div class="work-title">YT Downloader</div>
-      <div class="work-desc">YouTube content downloader powered by yt-dlp. Node/Express backend handles the API connections and package pipeline.</div>
-      <div class="work-tags">
-        <span class="work-tag">#Node.js</span><span class="work-tag">#Express</span><span class="work-tag">#yt-dlp</span><span class="work-tag">#npm</span>
-      </div>
-    </a>
-    <a class="work-card" href="https://tharunnaidug.github.io/restaurant/" target="_blank">
-      <div class="work-type">FRONT END</div>
-      <div class="work-title">Restaurant Page</div>
-      <div class="work-desc">Responsive restaurant landing page with Swiper.js image carousel. Pure HTML, CSS, and Vanilla JS.</div>
-      <div class="work-tags">
-        <span class="work-tag">#Vanilla JS</span><span class="work-tag">#Swiper.js</span><span class="work-tag">#CSS</span>
-      </div>
-    </a>
-    <a class="work-card" href="projects.html">
-      <div class="work-type">VIEW ALL</div>
-      <div class="work-title">More Projects →</div>
-      <div class="work-desc">Quiz app, Todo list, Rock-Paper-Scissors, Social Media Downloader, Password Generator and more.</div>
-      <div class="work-tags">
-        <span class="work-tag">#GitHub</span><span class="work-tag">#Open Source</span>
-      </div>
-    </a>
-  </div>
-</section>
-
-<section id="contact">
-  <div class="section-label">CONTACT</div>
-  <div class="contact-inner">
-    <div>
-      <h2 class="contact-big">Let's<br>build<br>something <span class="ac">together.</span></h2>
-      <p class="contact-sub">Open to full-time roles, freelance projects and interesting collaborations. Drop a message or reach out directly.</p>
-      <a href="mailto:tarunnaidug5@gmail.com" class="contact-email">tarunnaidug5@gmail.com ↗</a>
-    </div>
-    <form class="contact-form" id="contact-form">
-      <input type="hidden" name="access_key" value="39a4e0db-fd3b-45d4-8296-195799ab7878">
-      <div class="form-row">
-        <div class="form-field">
-          <label class="form-label" for="fname">NAME</label>
-          <input class="form-input" id="fname" type="text" name="name" placeholder="Your name" required>
-        </div>
-        <div class="form-field">
-          <label class="form-label" for="femail">EMAIL</label>
-          <input class="form-input" id="femail" type="email" name="email" placeholder="your@email.com" required>
-        </div>
-      </div>
-      <div class="form-field">
-        <label class="form-label" for="fmsg">MESSAGE</label>
-        <textarea class="form-textarea" id="fmsg" name="message" placeholder="Tell me about your project…" required></textarea>
-      </div>
-      <button type="submit" class="form-submit" id="fsubmit">SEND MESSAGE →</button>
-      <div id="form-result"></div>
-    </form>
-  </div>
-</section>
-
-<footer>
-  <span class="footer-copy">© 2025 Tarun G , Bengaluru</span>
-  <div class="footer-socials">
-    <a href="https://github.com/tharunnaidug" target="_blank">GitHub</a>
-    <a href="https://www.linkedin.com/in/tarun-g-54b37a251" target="_blank">LinkedIn</a>
-    <a href="https://www.instagram.com/tharunnaidug" target="_blank">Instagram</a>
-    <a href="https://x.com/tharunnaidu_g" target="_blank">Twitter / X</a>
-    <a href="https://leetcode.com/u/tarunnaidug/" target="_blank">LeetCode</a>
-  </div>
-</footer>
-
-<script>
-  const form = document.getElementById('contact-form');
-  const btn = document.getElementById('fsubmit');
-  const result = document.getElementById('form-result');
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    btn.textContent = 'SENDING…';
-    btn.disabled = true;
-    result.textContent = '';
-    result.className = '';
-
-    const data = Object.fromEntries(new FormData(form));
-
-    try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      const json = await res.json();
-      if (json.success) {
-        result.textContent = '✓ MESSAGE SENT — I\'LL GET BACK TO YOU SOON.';
-        result.className = 'ok';
-        form.reset();
-        btn.textContent = 'SEND MESSAGE →';
-        btn.disabled = false;
-      } else {
-        throw new Error(json.message);
-      }
-    } catch (err) {
-      result.textContent = '✗ SOMETHING WENT WRONG. TRY EMAILING DIRECTLY.';
-      result.className = 'err';
-      btn.textContent = 'SEND MESSAGE →';
-      btn.disabled = false;
-    }
-  });
-</script>
+    </section>
+    <section class="section" id="projects"><h2>Selected Projects</h2><div class="repos">
+      <article class="repo"><a href="https://agritrade-three.vercel.app" target="_blank" rel="noreferrer">AgriTrade ↗</a><p>Agricultural marketplace and auction platform with scheduled auctions, JWT authentication, Razorpay integration, and live bidding over WebSockets.</p><div class="repo-meta">React · Node.js · Express · MongoDB · WebSockets</div></article>
+      <article class="repo"><span class="project-name">Load Balancer Simulator</span><p>Interactive simulation of Round Robin and Least Connections routing, with live server and request metrics.</p><div class="repo-meta">React · Node.js · Express · Socket.IO</div></article>
+      <article class="repo"><span class="project-name">Placement Intelligence</span><p>Explores placement readiness, recruitment drives, and skill development analytics through data-driven analysis.</p><div class="repo-meta">Next.js · Databricks Genie</div></article>
+      <article class="repo"><a href="https://chatapp-h0mo.onrender.com/" target="_blank" rel="noreferrer">MERN Chat App ↗</a><p>Real-time messaging with Socket.IO and MongoDB persistence.</p><div class="repo-meta">React · Node.js · MongoDB</div></article>
+    </div></section>
+    <section class="section" id="experience"><h2>Experience</h2><div class="timeline"><article class="entry"><h3>MERN Stack Developer Intern</h3><time>Sep 2025 — Dec 2025</time><div class="sub">AndroWebsTech Pvt Ltd</div></article></div></section>
+    <section class="section" id="education"><h2>Education</h2><div class="timeline">
+      <article class="entry"><h3>Master of Computer Applications (MCA)</h3><time>In progress</time><div class="sub">B.M.S. College of Engineering · Bengaluru</div></article>
+      <article class="entry"><h3>Bachelor of Computer Applications (BCA)</h3><div class="sub">Nisarga College of Management</div></article>
+    </div></section>
+    <section class="section" id="skills"><h2>Skills</h2><div class="skill-groups">
+      <div class="skill"><b>FRONTEND</b><span>React · Next.js · JavaScript · HTML · CSS · Bootstrap</span></div><div class="skill"><b>BACKEND</b><span>Node.js · Express.js · REST APIs</span></div><div class="skill"><b>DATA</b><span>MongoDB · PostgreSQL</span></div><div class="skill"><b>REALTIME</b><span>WebSockets · Socket.IO</span></div><div class="skill"><b>TOOLS</b><span>Git · GitHub · Docker · Vercel · Render</span></div><div class="skill"><b>OTHER</b><span>JWT authentication · Razorpay · API pagination</span></div>
+    </div></section>
+    <footer class="footer"><span>© <span id="year"></span> Tarun G · Bengaluru, India</span><span>Built with care</span></footer>
+  </main>
+  <dialog id="search-dialog" aria-label="Search portfolio"><input class="search-input" id="search-input" type="search" placeholder="Search sections and projects…" aria-label="Search sections and projects"><div class="search-results" id="search-results"></div></dialog>
+  <script>
+    const activityTabs=[...document.querySelectorAll('[data-activity]')];
+    activityTabs.forEach(tab=>tab.addEventListener('click',()=>{const selected=tab.dataset.activity;activityTabs.forEach(item=>item.setAttribute('aria-selected',String(item===tab)));document.getElementById('github-panel').hidden=selected!=='github';document.getElementById('leetcode-panel').hidden=selected!=='leetcode';document.getElementById('activity-handle').textContent=selected==='github'?'@tharunnaidug':'@tarunnaidug'}));
+    const dialog=document.getElementById('search-dialog'),searchInput=document.getElementById('search-input'),searchResults=document.getElementById('search-results');
+    const searchable=[...document.querySelectorAll('main section[id]')].map(el=>({name:el.querySelector('h2')?.textContent||el.id,href:'#'+el.id,body:el.innerText}));
+    function showSearch(){dialog.showModal();searchInput.value='';renderSearch('');searchInput.focus()}function renderSearch(q){const rows=searchable.filter(x=>(x.name+' '+x.body).toLowerCase().includes(q.toLowerCase())).slice(0,8);searchResults.innerHTML=rows.length?rows.map(x=>`<a href="${x.href}">${x.name}</a>`).join(''):'<div class="empty">No matching sections</div>'}
+    document.getElementById('open-search').addEventListener('click',showSearch);searchInput.addEventListener('input',e=>renderSearch(e.target.value));searchResults.addEventListener('click',e=>{if(e.target.closest('a'))dialog.close()});dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();showSearch()}});
+    document.getElementById('theme-toggle').addEventListener('click',()=>{const light=document.body.classList.toggle('theme-light');document.documentElement.style.colorScheme=light?'light':'dark';document.getElementById('theme-toggle').textContent=light?'☀':'☾'});
+    document.getElementById('year').textContent=new Date().getFullYear();
+    function renderRepos(rows){const root=document.getElementById('repo-list');root.replaceChildren();rows.filter(r=>!r.fork).slice(0,4).forEach(r=>{const item=document.createElement('article');item.className='repo';const link=document.createElement('a');link.href=r.html_url;link.target='_blank';link.rel='noreferrer';link.textContent=r.name+' ↗';const p=document.createElement('p');p.textContent=r.description||'Public repository';const meta=document.createElement('div');meta.className='repo-meta';meta.textContent=[r.language,r.stargazers_count?`${r.stargazers_count} stars`:null].filter(Boolean).join(' · ')||'Public repository';item.append(link,p,meta);root.append(item)})}
+    const repoCacheKey='tarun-github-repos-v1';let cachedRepos;try{cachedRepos=JSON.parse(localStorage.getItem(repoCacheKey)||'null')}catch{}if(cachedRepos?.expires>Date.now()&&Array.isArray(cachedRepos.rows)){renderRepos(cachedRepos.rows)}else{fetch('https://api.github.com/users/tharunnaidug/repos?sort=updated&per_page=10',{headers:{Accept:'application/vnd.github+json'}}).then(r=>{if(!r.ok)throw new Error('GitHub response unavailable');return r.json()}).then(rows=>{renderRepos(rows);try{localStorage.setItem(repoCacheKey,JSON.stringify({expires:Date.now()+6*60*60*1000,rows}))}catch{}}).catch(()=>{const root=document.getElementById('repo-list');root.innerHTML='<p class="empty">Public repositories are unavailable right now. <a href="https://github.com/tharunnaidug" target="_blank" rel="noreferrer">Open GitHub ↗</a></p>'})}
+  </script>
+  <script src="leetcode.js"></script>
 </body>
 </html>
